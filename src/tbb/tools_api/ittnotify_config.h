@@ -305,27 +305,27 @@ ITT_INLINE long __itt_interlocked_increment(volatile long* ptr)
 #define __itt_fstrdup(s)          strdup(s)
 #define __itt_thread_id()         pthread_self()
 #define __itt_thread_yield()      sched_yield()
-#if ITT_ARCH==ITT_ARCH_IA64
-#ifdef __INTEL_COMPILER
-#define __TBB_machine_fetchadd4(addr, val) __fetchadd4_acq((void *)addr, val)
-#else  /* __INTEL_COMPILER */
-/* TODO: Add Support for not Intel compilers for IA-64 architecture */
-#endif /* __INTEL_COMPILER */
-#elif ITT_ARCH==ITT_ARCH_IA32 || ITT_ARCH==ITT_ARCH_IA32E /* ITT_ARCH!=ITT_ARCH_IA64 */
-ITT_INLINE long
-__TBB_machine_fetchadd4(volatile void* ptr, long addend) ITT_INLINE_ATTRIBUTE;
-ITT_INLINE long __TBB_machine_fetchadd4(volatile void* ptr, long addend)
-{
-    long result;
-    __asm__ __volatile__("lock\nxadd %0,%1"
-                          : "=r"(result),"=m"(*(int*)ptr)
-                          : "0"(addend), "m"(*(int*)ptr)
-                          : "memory");
-    return result;
-}
-#elif ITT_ARCH==ITT_ARCH_ARM || ITT_ARCH==ITT_ARCH_PPC64
+//#if ITT_ARCH==ITT_ARCH_IA64
+//#ifdef __INTEL_COMPILER
+//#define __TBB_machine_fetchadd4(addr, val) __fetchadd4_acq((void *)addr, val)
+//#else  /* __INTEL_COMPILER */
+///* TODO: Add Support for not Intel compilers for IA-64 architecture */
+//#endif /* __INTEL_COMPILER */
+//#elif ITT_ARCH==ITT_ARCH_IA32 || ITT_ARCH==ITT_ARCH_IA32E /* ITT_ARCH!=ITT_ARCH_IA64 */
+//ITT_INLINE long
+//__TBB_machine_fetchadd4(volatile void* ptr, long addend) ITT_INLINE_ATTRIBUTE;
+//ITT_INLINE long __TBB_machine_fetchadd4(volatile void* ptr, long addend)
+//{
+//    long result;
+//    __asm__ __volatile__("lock\nxadd %0,%1"
+//                          : "=r"(result),"=m"(*(int*)ptr)
+//                          : "0"(addend), "m"(*(int*)ptr)
+//                          : "memory");
+//    return result;
+//}
+//#elif ITT_ARCH==ITT_ARCH_ARM || ITT_ARCH==ITT_ARCH_PPC64
 #define __TBB_machine_fetchadd4(addr, val) __sync_fetch_and_add(addr, val)
-#endif /* ITT_ARCH==ITT_ARCH_IA64 */
+//#endif /* ITT_ARCH==ITT_ARCH_IA64 */
 #ifndef ITT_SIMPLE_INIT
 ITT_INLINE long
 __itt_interlocked_increment(volatile long* ptr) ITT_INLINE_ATTRIBUTE;

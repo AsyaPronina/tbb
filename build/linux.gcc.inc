@@ -40,10 +40,10 @@ ifneq (,$(shell $(CONLY) -dumpfullversion -dumpversion | egrep  "^(4\.[2-9]|[5-9
     OPENMP_FLAG = -fopenmp
 endif
 
-# gcc 4.8 and later support RTM intrinsics, but require command line switch to enable them
-ifneq (,$(shell $(CONLY) -dumpfullversion -dumpversion | egrep  "^(4\.[8-9]|[5-9])"))
-    RTM_KEY = -mrtm
-endif
+## gcc 4.8 and later support RTM intrinsics, but require command line switch to enable them
+#ifneq (,$(shell $(CONLY) -dumpfullversion -dumpversion | egrep  "^(4\.[8-9]|[5-9])"))
+#    RTM_KEY = -mrtm
+#endif
 
 # gcc 4.0 and later have -Wextra that is used by some our customers.
 ifneq (,$(shell $(CONLY) -dumpfullversion -dumpversion | egrep  "^([4-9])"))
@@ -81,8 +81,9 @@ endif
 
 ifeq (intel64,$(arch))
     ITT_NOTIFY = -DDO_ITT_NOTIFY
-    CPLUS_FLAGS += -m64 $(RTM_KEY)
-    LIB_LINK_FLAGS += -m64
+    #CPLUS_FLAGS += -m64 $(RTM_KEY)
+    CPLUS_FLAGS += $(RTM_KEY)
+    #LIB_LINK_FLAGS += -m64
 endif
 
 ifeq (ia32,$(arch))
@@ -92,8 +93,8 @@ ifeq (ia32,$(arch))
 endif
 
 ifeq (ppc64,$(arch))
-    CPLUS_FLAGS += -m64
-    LIB_LINK_FLAGS += -m64
+    #CPLUS_FLAGS += -m64
+    #LIB_LINK_FLAGS += -m64
 endif
 
 ifeq (ppc32,$(arch))
@@ -108,8 +109,10 @@ endif
 
 # for some gcc versions on Solaris, -m64 may imply V9, but perhaps not everywhere (TODO: verify)
 ifeq (sparc,$(arch))
-    CPLUS_FLAGS    += -mcpu=v9 -m64
-    LIB_LINK_FLAGS += -mcpu=v9 -m64
+    #CPLUS_FLAGS    += -mcpu=v9 -m64
+    CPLUS_FLAGS    += -mcpu=v9
+    #LIB_LINK_FLAGS += -mcpu=v9 -m64
+    LIB_LINK_FLAGS += -mcpu=v9
 endif
 
 # automatically generate "IT" instructions when compiling for Thumb ISA
